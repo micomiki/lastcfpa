@@ -1,0 +1,26 @@
+# Carbon Footprint Tracking Application
+
+## About
+
+The Carbon Footprint Tracking Application is a web-based tool designed to calculate and track carbon footprints. It provides users with the ability to assess their environmental impact by measuring the greenhouse gas emissions associated with various activities.
+
+This web application is developed using ASP.NET Web Forms technology, which allows for rapid development of dynamic and interactive web pages. ASP.NET Web Forms provide a familiar event-driven programming model and powerful data-binding features, making it suitable for building robust and scalable web applications.
+
+## Features
+
+- Calculate carbon footprint based on user input
+- Track carbon emissions over time
+- Generate reports and visualizations of carbon footprint data
+- User authentication and access control
+- Integration with external APIs for environmental data
+## Updates
+ - Includes DataEntry section for Electricity Consumption
+ - Includes DataEntry section for Transport Emissions
+ - Includes DataHistory section for Transport Emissions History
+ - Includes DataHistory section for Electricity Consumption History
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/micomiki/Carbon.git

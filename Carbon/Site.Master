@@ -1,0 +1,139 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Carbon.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> </title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    .navbar-nav .nav-link.active {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Adjust the shadow color and intensity as needed */
+    }
+</style>
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm text-white" style="height: 60px; background-color: darkslategray;">
+            <div class="container">
+               <a class="navbar-brand fw-bold text-white" id="CFTALink" runat="server" style="margin-left:30px" href="~/DataEntry.aspx">CFTA</a>
+
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" style="height: 60px; background-color: darkslategray;">
+                   
+                    <asp:LoginView runat="server" ViewStateMode="Disabled">
+                        <LoggedInTemplate>
+                            
+                            <ul class="navbar-nav" style="margin-left: 30px">
+                                <li class="nav-item">
+                                    <a runat="server" class="nav-link" href="~/DataEntry" title="Data Entry" style="color: white" id="dataentry">DataEntry</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a runat="server" class="nav-link" href="~/DataHistory" title="Data History" style="color: white" id="datahistory">DataHistory</a>
+                                </li>
+                            </ul>
+
+                            <ul class="navbar-nav ml-auto" style="margin-right: 30px">
+                                <li class="nav-item">
+                                    <a runat="server" class="nav-link" href="~/Account/Manage" title="Manage your account" style="color: white">Hello, <%: Context.User.Identity.GetUserName()  %> !</a>
+                                </li>
+                                <li class="nav-item">
+                                    <asp:LoginStatus runat="server" CssClass="nav-link" LogoutAction="Redirect" Style="color: white" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                </li>
+                            </ul>
+
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </div>
+            </div>
+        </nav>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p style="color:white">&copy; <%: DateTime.Now.Year %> - CFTA</p>
+            </footer>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+   <script>
+       $(document).ready(function () {
+           // Function to handle click on navigation item
+           function handleNavigationClick() {
+               $('ul.navbar-nav > li > a.active').removeClass('active');
+               $(this).addClass('active');
+
+               // Store the id of the clicked navigation item in local storage
+               localStorage.setItem('activeNavItem', $(this).attr('id'));
+           }
+
+           var isAuthenticated = '<%= Context.User.Identity.IsAuthenticated %>';
+
+        if (isAuthenticated === 'True') {
+            $('#CFTALink').attr('href', '<%= ResolveUrl("~/Welcome.aspx") %>');
+            $('#CFTALink').click(handleNavigationClick);
+        } else {
+            $('#CFTALink').attr('href', '<%= ResolveUrl("~/Default.aspx") %>');
+        }
+
+        // Attach click event handler to navigation items
+        $('ul.navbar-nav > li > a').click(handleNavigationClick);
+
+        // Check if there's an active navigation item stored in local storage
+        var activeNavItem = localStorage.getItem('activeNavItem');
+        if (activeNavItem) {
+            // If there's an active navigation item, set it as active
+            $('#' + activeNavItem).addClass('active');
+        }
+
+        // Check if the previous page is "Login.aspx"
+        var previousPage = '<%= Request.UrlReferrer != null ? Request.UrlReferrer.AbsolutePath : "" %>';
+        if (previousPage.endsWith("Login.aspx")) {
+            $('ul.navbar-nav > li > a.active').removeClass('active');
+            localStorage.setItem('activeNavItem', 'btnbn');
+           }
+          
+    });
+   </script>
+
+
+
+</body>
+</html>
